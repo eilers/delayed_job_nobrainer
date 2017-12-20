@@ -6,3 +6,4 @@ bin
 coverage
 pkg/*
 gemfiles/**/*.gemfile.lock
+*.gem
