@@ -47,19 +47,43 @@ module Delayed
                 end
 
                 def self.reserve(worker, max_run_time = Worker.max_run_time)
+                    # Taken from Active Record
                     # where("(run_at <= ? AND (locked_at IS NULL OR locked_at < ?) OR locked_by = ?) AND failed_at IS NULL", db_time_now, db_time_now - max_run_time, worker_name)
                     # "priority >= ?", Worker.min_priority if Worker.min_priority
                     # "priority <= ?", Worker.max_priority) if Worker.max_priority
                     # where(queue: Worker.queues) if Worker.queues.any?
                     # order("priority ASC, run_at ASC") }
 
-                    filter_hash = { :failed_at.defined => false, :run_at.le => db_time_now, :or => [{:locked_at.defined => false}, {:locked_at.lt => db_time_now - max_run_time}, :locked_by => worker.name] }
+                    filter_hash = { :failed_at.defined => false, :run_at.le => db_time_now,
+                                    :or => [{:locked_at.defined => false},
+                                            {:locked_at.lt => db_time_now - max_run_time},
+                                            :locked_by => worker.name] }
                     filter_hash = filter_hash.merge({:priority.ge => Worker.min_priority}) if Worker.min_priority
                     filter_hash = filter_hash.merge({:priority.le => Worker.max_priority}) if Worker.max_priority
                     # TODO: add sorting for priority
+
                     job = where(filter_hash).first
-                    job.update(locked_at: Time.now, locked_by: worker.name)
+                    job.update(locked_at: Time.now, locked_by: worker.name) unless job.nil?
                     job
+                end
+
+                def error
+                    unless instance_variable_defined?(:@error)
+                        if last_error
+                            backtrace = last_error.split("\n")
+                            message = backtrace.shift
+                            @error = Exception.new(message)
+                            @error.set_backtrace(backtrace)
+                        else
+                            @error = nil
+                        end
+                    end
+                    @error
+                end
+
+                def error=(error)
+                    @error = error
+                    self.last_error = "#{error.message}\n#{error.backtrace.join("\n")}"[0..250].gsub(/\s\w+\s*$/,'...') if self.respond_to?(:last_error=)
                 end
 
             end
