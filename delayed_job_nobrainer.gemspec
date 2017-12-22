@@ -10,5 +10,5 @@ Gem::Specification.new do |spec|
   spec.name           = "delayed_job_nobrainer"
   spec.require_paths  = ["lib"]
   spec.summary        = "NoBrainer backend for DelayedJob"
-  spec.version        = "0.1.0"
+  spec.version        = "0.1.2"
 end
