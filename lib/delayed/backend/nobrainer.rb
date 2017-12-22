@@ -16,7 +16,7 @@ module Delayed
 
                 field :priority,    :type => Integer,   :index => true
                 field :attempts,    :type => Integer
-                field :handler,     :type => String
+                field :handler,     :type => Text
                 field :last_error,  :type => String
                 field :run_at,      :type => Time,      :index => true
                 field :locked_at,   :type => Time
