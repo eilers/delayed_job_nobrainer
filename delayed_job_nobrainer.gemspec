@@ -5,10 +5,10 @@ Gem::Specification.new do |spec|
   spec.description    = "NoBrainer backend for Delayed::Job, based on delayed_job_active_record"
   spec.email          = ["se@intelligentmobiles.com"]
   spec.files          = %w(CONTRIBUTING.md LICENSE.md README.md delayed_job_nobrainer.gemspec) + Dir["lib/**/*.rb"]
-  spec.homepage       = "http://intelligentmobiles.com"
+  spec.homepage       = "https://github.com/eilers/delayed_job_nobrainer"
   spec.licenses       = ["MIT"]
   spec.name           = "delayed_job_nobrainer"
   spec.require_paths  = ["lib"]
   spec.summary        = "NoBrainer backend for DelayedJob"
-  spec.version        = "0.1.2"
+  spec.version        = "0.1.3"
 end
