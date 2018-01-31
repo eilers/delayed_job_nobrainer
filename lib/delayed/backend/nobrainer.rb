@@ -62,7 +62,7 @@ module Delayed
                     filter_hash = filter_hash.merge({:priority.le => Worker.max_priority}) if Worker.max_priority
                     filter_hash = filter_hash.merge({:queue.in => Worker.queues}) if Worker.queues.any?
 
-                    job = where(filter_hash).order_by(:priority => :asc).first
+                    job = where(filter_hash).order_by(:priority => :asc).order_by(:created_at => :asc).first
                     job.update(locked_at: Time.now, locked_by: worker.name) unless job.nil?
                     job
                 end
