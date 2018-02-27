@@ -20,9 +20,9 @@ module Delayed
                 field :last_error,  :type => String
                 field :run_at,      :type => Time,      :index => true
                 field :locked_at,   :type => Time
-                field :locked_by,   :type => String
+                field :locked_by,   :type => String,    :index => true
                 field :failed_at,   :type => Time
-                field :queue,       :type => String
+                field :queue,       :type => String,    :index => true
 
                 before_create do |o|
                     o.attempts   = 0
